@@ -1,13 +1,18 @@
 var redditSvg;
 var previousData;
 
+<<<<<<< HEAD
 var POLL_SPEED = 1000;
 
+=======
+var POLL_SPEED = 2000;
+>>>>>>> remotes/origin/gh-pages
 
 function redditVis() {
   // setup a poll requesting data, and make an immediate request
   setInterval(requestData,POLL_SPEED);
   requestData();
+<<<<<<< HEAD
    var w = 1400, //width
 h = 1400, //height
 r = 500, //radius
@@ -51,6 +56,15 @@ return "translate(" + arc.centroid(d) + ")"; //this gives us a pair of coordinat
 })
 .attr("text-anchor", "middle") //center the text on it's origin
 .text(function(d, i) { return data[i].label; }); //get the label from our original data array
+=======
+
+  // initial setup only needs to happen once 
+  // - we don't want to append multiple svg elements
+  redditSvg = d3.select("body")
+        .append("svg")
+        .attr("width",document.body.clientWidth - 50)
+        .attr("height",document.body.clientWidth -50)
+>>>>>>> remotes/origin/gh-pages
 }
 
 function requestData() {
@@ -64,12 +78,17 @@ function requestData() {
 /////////////////////////////////////
 
 function runVis(data) {
+<<<<<<< HEAD
 //console.log(data);
 d3.select("svg").remove(); 
+=======
+
+>>>>>>> remotes/origin/gh-pages
   // d3 never does anything automagical to your data
   // so we'll need to get data into the right format, with the
   // previous values attached
   var formatted = formatRedditData(data,previousData);
+<<<<<<< HEAD
 var data2 = [];
 jQuery.each(formatted, function() {
  data2.push({ 
@@ -119,6 +138,41 @@ d.outerRadius = r;
 
   
 
+=======
+
+  // select our stories, pulling in previous ones to update
+  // by selecting on the stories' class name
+  var stories = redditSvg
+     .selectAll("text")
+     // the return value of data() is the update context - so the 'stories' var is
+     // how we refence the update context from now on
+     .data(formatted,function(d) {
+       // prints out data in your console id, score, diff from last pulling, text
+       
+       // console.log(d.id,d.score,d.diff,d.title);
+
+       // use a key function to ensure elements are always bound to the same 
+       // story (especially important when data enters/exits)
+       return d.id;
+     });
+
+  // ENTER context
+  stories.enter()
+    .append("text")
+    .text(function(d){return d.score + " " + d.diff + " " + d.title})
+    .attr("y", function(d,i){return 1.5*i + 1 + "em"})
+    .style("color","black");
+
+  // UPDATE + ENTER context
+  // elements added via enter() will then be available on the update context, so
+  // we can set attributes once, for entering and updating elements, here
+  stories
+    .text(function(d){return d.score + " " + d.diff + " " + d.title})
+
+  // EXIT content
+  stories.exit()
+    .remove()
+>>>>>>> remotes/origin/gh-pages
 }
 
 
